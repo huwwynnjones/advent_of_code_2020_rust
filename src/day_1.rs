@@ -1,3 +1,9 @@
+use std::{
+    fs::File,
+    io,
+    io::{BufRead, BufReader},
+};
+
 fn find_items_that_sum_2020(input: &[u32]) -> Option<(u32, u32)> {
     for i in input {
         for j in input {
@@ -7,6 +13,21 @@ fn find_items_that_sum_2020(input: &[u32]) -> Option<(u32, u32)> {
         }
     }
     None
+}
+
+fn load_input_file(file_name: &str) -> io::Result<Vec<u32>> {
+    let input = File::open(file_name)?;
+    let reader = BufReader::new(input);
+    let mut numbers = Vec::new();
+
+    for line in reader.lines() {
+        let nmb = line
+            .expect("Gap in input list")
+            .parse::<u32>()
+            .expect("Problems parsing");
+        numbers.push(nmb)
+    }
+    Ok(numbers)
 }
 
 #[cfg(test)]
@@ -23,5 +44,11 @@ mod test {
     fn test_find_items_that_sum_2020_alternate_order() {
         let input = [979, 675, 1721, 366, 1456, 299, 1456];
         assert_eq!(find_items_that_sum_2020(&input), Some((1721, 299)))
+    }
+
+    #[test]
+    fn test_load_input_file() {
+        let input = load_input_file("day_1_test.txt").expect("Unable to load the file");
+        assert_eq!(input, [1472, 1757, 1404])
     }
 }
