@@ -4,7 +4,7 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-fn find_items_that_sum_2020(input: &[u32]) -> Option<(u32, u32)> {
+pub fn find_items_that_sum_2020(input: &[u32]) -> Option<(u32, u32)> {
     for i in input {
         for j in input {
             if i + j == 2020 {
@@ -15,7 +15,7 @@ fn find_items_that_sum_2020(input: &[u32]) -> Option<(u32, u32)> {
     None
 }
 
-fn load_input_file(file_name: &str) -> io::Result<Vec<u32>> {
+pub fn load_input_file(file_name: &str) -> io::Result<Vec<u32>> {
     let input = File::open(file_name)?;
     let reader = BufReader::new(input);
     let mut numbers = Vec::new();
