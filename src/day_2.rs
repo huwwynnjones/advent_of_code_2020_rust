@@ -38,7 +38,11 @@ fn parse_password_policy(input: &str) -> Policy {
 }
 
 fn password_matches_policy(policy: &Policy, password: &str) -> bool {
-    true
+    let count = password
+        .chars()
+        .filter(|c| *c == policy.target_char)
+        .count() as u32;
+    count >= policy.min && count <= policy.max
 }
 
 #[cfg(test)]
@@ -56,6 +60,9 @@ mod test {
     fn test_password_matches_policy() {
         let policy = Policy::new(1, 3, 'a');
         let password = "abcde";
-        assert_eq!(true, password_matches_policy(&policy, password))
+        assert_eq!(true, password_matches_policy(&policy, password));
+        let policy = Policy::new(1, 3, 'b');
+        let password = "cdefg";
+        assert_eq!(false, password_matches_policy(&policy, password))
     }
 }
