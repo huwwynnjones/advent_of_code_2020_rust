@@ -57,8 +57,9 @@ fn split_input_string(input: &str) -> (Policy, String) {
     (parse_password_policy(&policy), password.to_string())
 }
 
-fn intepret_input_line(input: &str) -> bool {
-    true
+fn interpret_input_line(input: &str) -> bool {
+    let (policy, password) = split_input_string(input);
+    password_matches_policy(&policy, &password)
 }
 
 #[cfg(test)]
@@ -69,14 +70,14 @@ mod test {
     fn test_parse_password_policy() {
         let correct_policy = Policy::new(1, 3, 'a');
         let input = "1-3 a";
-        assert_eq!(correct_policy, parse_password_policy(&input));
+        assert_eq!(correct_policy, parse_password_policy(input));
     }
 
     #[test]
     fn test_parse_password_policy_two_digit_numbers() {
         let correct_policy = Policy::new(10, 12, 'a');
         let input = "10-12 a";
-        assert_eq!(correct_policy, parse_password_policy(&input));
+        assert_eq!(correct_policy, parse_password_policy(input));
     }
 
     #[test]
@@ -94,12 +95,12 @@ mod test {
         let input = "1-3 a: abcde";
         let policy = Policy::new(1, 3, 'a');
         let password = "abcde";
-        assert_eq!((policy, password.into()), split_input_string(&input))
+        assert_eq!((policy, password.into()), split_input_string(input))
     }
 
     #[test]
     fn test_intepret_input_line() {
         let input = "1-3 a: abcde";
-        assert_eq!(true, intepret_input_line(&input));
+        assert_eq!(true, interpret_input_line(input));
     }
 }
