@@ -63,7 +63,10 @@ fn interpret_input_line(input: &str) -> bool {
 }
 
 fn number_of_valid_passwords(input: &[&str]) -> u32 {
-    input.iter().filter(|i| interpret_input_line(i)).count() as u32
+    input
+        .iter()
+        .filter(|line| interpret_input_line(line))
+        .count() as u32
 }
 
 #[cfg(test)]
