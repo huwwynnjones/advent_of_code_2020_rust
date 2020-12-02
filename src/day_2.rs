@@ -24,15 +24,14 @@ impl Policy {
 fn parse_password_policy(input: &str) -> Policy {
     let split_input = input.split_whitespace().collect::<Vec<&str>>();
     let number_input = split_input.get(0).expect("No number input found");
-    let target_char = split_input
+    let target_char = *split_input
         .get(1)
         .expect("No char input found")
         .trim()
         .chars()
         .collect::<Vec<char>>()
         .first()
-        .expect("Empty vec")
-        .clone();
+        .expect("Empty vec");
     let min_max_split = number_input.split_terminator('-').collect::<Vec<&str>>();
     let min = min_max_split
         .get(0)
