@@ -37,6 +37,10 @@ fn parse_password_policy(input: &str) -> Policy {
     Policy::new(min, max, target_char)
 }
 
+fn password_matches_policy(policy: &Policy, password: &str) -> bool {
+    true
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -46,5 +50,12 @@ mod test {
         let correct_policy = Policy::new(1, 3, 'a');
         let input = "1-3 a";
         assert_eq!(correct_policy, parse_password_policy(&input))
+    }
+
+    #[test]
+    fn test_password_matches_policy() {
+        let policy = Policy::new(1, 3, 'a');
+        let password = "abcde";
+        assert_eq!(true, password_matches_policy(&policy, password))
     }
 }
