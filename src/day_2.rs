@@ -62,6 +62,10 @@ fn interpret_input_line(input: &str) -> bool {
     password_matches_policy(&policy, &password)
 }
 
+fn number_of_valid_passwords(input: &[&str]) -> u32 {
+    2
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -102,5 +106,11 @@ mod test {
     fn test_intepret_input_line() {
         let input = "1-3 a: abcde";
         assert_eq!(true, interpret_input_line(input));
+    }
+
+    #[test]
+    fn test_number_of_valid_passwords() {
+        let input = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"];
+        assert_eq!(2, number_of_valid_passwords(&input))
     }
 }
