@@ -1,4 +1,5 @@
 mod day_1;
+mod day_2;
 
 use day_1::{find_three_items_that_sum_2020, find_two_items_that_sum_2020, load_input_file};
 
