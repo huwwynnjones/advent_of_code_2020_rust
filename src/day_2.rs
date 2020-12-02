@@ -16,7 +16,25 @@ impl Policy {
 }
 
 fn parse_password_policy(input: &str) -> Policy {
-    Policy::new(1, 3, 'a')
+    let min = input
+        .get(0..1)
+        .expect("No characters")
+        .parse::<u32>()
+        .expect("Could not parse");
+    let max = input
+        .get(2..3)
+        .expect("No characters")
+        .parse::<u32>()
+        .expect("Could not parse");
+    let target_char = input
+        .get(4..5)
+        .expect("No characters")
+        .chars()
+        .collect::<Vec<char>>()
+        .first()
+        .expect("Empty vec")
+        .clone();
+    Policy::new(min, max, target_char)
 }
 
 #[cfg(test)]
