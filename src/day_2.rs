@@ -1,3 +1,9 @@
+use std::{
+    fs::File,
+    io,
+    io::{BufRead, BufReader},
+};
+
 #[derive(Eq, PartialEq, Debug)]
 struct Policy {
     min: u32,
@@ -62,11 +68,22 @@ fn interpret_input_line(input: &str) -> bool {
     password_matches_policy(&policy, &password)
 }
 
-fn number_of_valid_passwords(input: &[&str]) -> u32 {
+pub fn number_of_valid_passwords(input: &[String]) -> u32 {
     input
         .iter()
         .filter(|line| interpret_input_line(line))
         .count() as u32
+}
+
+pub fn load_input_file(file_name: &str) -> io::Result<Vec<String>> {
+    let input = File::open(file_name)?;
+    let reader = BufReader::new(input);
+    let mut lines = Vec::new();
+
+    for line in reader.lines() {
+        lines.push(line.expect("Should be a line to read"))
+    }
+    Ok(lines)
 }
 
 #[cfg(test)]
@@ -113,7 +130,22 @@ mod test {
 
     #[test]
     fn test_number_of_valid_passwords() {
-        let input = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"];
+        let input = Vec::from([
+            "1-3 a: abcde".to_string(),
+            "1-3 b: cdefg".to_string(),
+            "2-9 c: ccccccccc".to_string(),
+        ]);
         assert_eq!(2, number_of_valid_passwords(&input))
+    }
+
+    #[test]
+    fn test_load_input_file() {
+        let input = load_input_file("day_2_test.txt").expect("Unable to load the file");
+        let correct_list = Vec::from([
+            "4-7 z: zzzfzlzzz".to_string(),
+            "3-4 l: blllk".to_string(),
+            "8-11 j: jjjjjjjgjjjj".to_string(),
+        ]);
+        assert_eq!(correct_list, input)
     }
 }
