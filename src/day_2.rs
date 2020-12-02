@@ -57,6 +57,10 @@ fn split_input_string(input: &str) -> (Policy, String) {
     (parse_password_policy(&policy), password.to_string())
 }
 
+fn intepret_input_line(input: &str) -> bool {
+    true
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -91,5 +95,11 @@ mod test {
         let policy = Policy::new(1, 3, 'a');
         let password = "abcde";
         assert_eq!((policy, password.into()), split_input_string(&input))
+    }
+
+    #[test]
+    fn test_intepret_input_line() {
+        let input = "1-3 a: abcde";
+        assert_eq!(true, intepret_input_line(&input));
     }
 }
