@@ -16,24 +16,28 @@ impl Policy {
 }
 
 fn parse_password_policy(input: &str) -> Policy {
-    let min = input
-        .get(0..1)
-        .expect("No characters")
-        .parse::<u32>()
-        .expect("Could not parse");
-    let max = input
-        .get(2..3)
-        .expect("No characters")
-        .parse::<u32>()
-        .expect("Could not parse");
-    let target_char = input
-        .get(4..5)
-        .expect("No characters")
+    let split_input = input.split_whitespace().collect::<Vec<&str>>();
+    let number_input = split_input.get(0).expect("No number input found");
+    let target_char = split_input
+        .get(1)
+        .expect("No char input found")
+        .trim()
         .chars()
         .collect::<Vec<char>>()
         .first()
         .expect("Empty vec")
         .clone();
+    let min_max_split = number_input.split_terminator('-').collect::<Vec<&str>>();
+    let min = min_max_split
+        .get(0)
+        .expect("No min found")
+        .parse::<u32>()
+        .expect("Could not parse min");
+    let max = min_max_split
+        .get(1)
+        .expect("No max found")
+        .parse::<u32>()
+        .expect("Could not parse max");
     Policy::new(min, max, target_char)
 }
 
@@ -61,6 +65,13 @@ mod test {
     fn test_parse_password_policy() {
         let correct_policy = Policy::new(1, 3, 'a');
         let input = "1-3 a";
+        assert_eq!(correct_policy, parse_password_policy(&input));
+    }
+
+    #[test]
+    fn test_parse_password_policy_two_digit_numbers() {
+        let correct_policy = Policy::new(10, 12, 'a');
+        let input = "10-12 a";
         assert_eq!(correct_policy, parse_password_policy(&input));
     }
 
