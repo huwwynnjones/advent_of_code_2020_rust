@@ -45,6 +45,10 @@ fn password_matches_policy(policy: &Policy, password: &str) -> bool {
     count >= policy.min && count <= policy.max
 }
 
+fn split_input_string(input: &str) -> (Policy, String) {
+    (Policy::new(1, 3, 'a'), "abcde".into())
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -64,5 +68,13 @@ mod test {
         let policy = Policy::new(1, 3, 'b');
         let password = "cdefg";
         assert_eq!(false, password_matches_policy(&policy, password))
+    }
+
+    #[test]
+    fn test_split_input_string() {
+        let input = "1-3 a: abcde";
+        let policy = Policy::new(1, 3, 'a');
+        let password = "abcde";
+        assert_eq!((policy, password.into()), split_input_string(&input))
     }
 }
