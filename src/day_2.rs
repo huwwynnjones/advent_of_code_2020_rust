@@ -46,7 +46,11 @@ fn password_matches_policy(policy: &Policy, password: &str) -> bool {
 }
 
 fn split_input_string(input: &str) -> (Policy, String) {
-    (Policy::new(1, 3, 'a'), "abcde".into())
+    let split_input = input.split_terminator(':').collect::<Vec<&str>>();
+    let policy = split_input.get(0).expect("No policy string");
+    let password = split_input.get(1).expect("No password string").trim();
+
+    (parse_password_policy(&policy), password.to_string())
 }
 
 #[cfg(test)]
@@ -57,7 +61,7 @@ mod test {
     fn test_parse_password_policy() {
         let correct_policy = Policy::new(1, 3, 'a');
         let input = "1-3 a";
-        assert_eq!(correct_policy, parse_password_policy(&input))
+        assert_eq!(correct_policy, parse_password_policy(&input));
     }
 
     #[test]
