@@ -54,6 +54,13 @@ fn min_max_strategy(policy: &Policy, password: &str) -> bool {
     count >= policy.min && count <= policy.max
 }
 
+fn position_strategy(policy: &Policy, password: &str) -> bool {
+    let first_idx = (policy.min - 1) as usize;
+    let second_idx = (policy.max - 1) as usize;
+    password.find(policy.target_char) == Some(first_idx)
+        || password.find(policy.target_char) == Some(second_idx)
+}
+
 fn split_input_string(input: &str) -> (Policy, String) {
     let split_input = input.split_terminator(':').collect::<Vec<&str>>();
     let policy = split_input.get(0).expect("No policy string");
@@ -69,11 +76,13 @@ fn interpret_input_line(input: &str, strategy: fn(&Policy, &str) -> bool) -> boo
 
 pub enum PolicyStrategy {
     MinMax,
+    Position,
 }
 
 pub fn number_of_valid_passwords(input: &[String], policy_strategy: PolicyStrategy) -> u32 {
     let strategy = match policy_strategy {
         PolicyStrategy::MinMax => min_max_strategy,
+        PolicyStrategy::Position => position_strategy,
     };
     input
         .iter()
@@ -121,6 +130,19 @@ mod test {
     }
 
     #[test]
+    fn test_position_strategy() {
+        let policy = Policy::new(1, 3, 'a');
+        let password = "abcde";
+        assert_eq!(true, position_strategy(&policy, password));
+        let policy = Policy::new(1, 3, 'b');
+        let password = "cdefg";
+        assert_eq!(false, position_strategy(&policy, password));
+        let policy = Policy::new(2, 9, 'c');
+        let password = "ccccccccc";
+        assert_eq!(false, position_strategy(&policy, password))
+    }
+
+    #[test]
     fn test_split_input_string() {
         let input = "1-3 a: abcde";
         let policy = Policy::new(1, 3, 'a');
@@ -129,7 +151,7 @@ mod test {
     }
 
     #[test]
-    fn test_intepret_input_line() {
+    fn test_intepret_input_line_with_min_max() {
         let input = "1-3 a: abcde";
         assert_eq!(
             true,
@@ -138,13 +160,26 @@ mod test {
     }
 
     #[test]
-    fn test_number_of_valid_passwords() {
+    fn test_number_of_valid_passwords_with_min_max() {
         let input = Vec::from([
             "1-3 a: abcde".to_string(),
             "1-3 b: cdefg".to_string(),
             "2-9 c: ccccccccc".to_string(),
         ]);
         assert_eq!(2, number_of_valid_passwords(&input, PolicyStrategy::MinMax))
+    }
+
+    #[test]
+    fn test_number_of_valid_passwords_with_position() {
+        let input = Vec::from([
+            "1-3 a: abcde".to_string(),
+            "1-3 b: cdefg".to_string(),
+            "2-9 c: ccccccccc".to_string(),
+        ]);
+        assert_eq!(
+            1,
+            number_of_valid_passwords(&input, PolicyStrategy::Position)
+        )
     }
 
     #[test]
