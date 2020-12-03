@@ -5,14 +5,14 @@ use std::{
 };
 
 #[derive(Eq, PartialEq, Debug)]
-struct Policy {
+pub struct Policy {
     min: u32,
     max: u32,
     target_char: char,
 }
 
 impl Policy {
-    fn new(min: u32, max: u32, target_char: char) -> Policy {
+    pub fn new(min: u32, max: u32, target_char: char) -> Policy {
         Policy {
             min,
             max,
@@ -46,7 +46,7 @@ fn parse_password_policy(input: &str) -> Policy {
     Policy::new(min, max, target_char)
 }
 
-fn password_matches_policy(policy: &Policy, password: &str) -> bool {
+fn min_max_strategy(policy: &Policy, password: &str) -> bool {
     let count = password
         .chars()
         .filter(|c| *c == policy.target_char)
@@ -62,15 +62,22 @@ fn split_input_string(input: &str) -> (Policy, String) {
     (parse_password_policy(&policy), password.to_string())
 }
 
-fn interpret_input_line(input: &str) -> bool {
+fn interpret_input_line(input: &str, strategy: fn(&Policy, &str) -> bool) -> bool {
     let (policy, password) = split_input_string(input);
-    password_matches_policy(&policy, &password)
+    strategy(&policy, &password)
 }
 
-pub fn number_of_valid_passwords(input: &[String]) -> u32 {
+pub enum PolicyStrategy {
+    MinMax,
+}
+
+pub fn number_of_valid_passwords(input: &[String], policy_strategy: PolicyStrategy) -> u32 {
+    let strategy = match policy_strategy {
+        PolicyStrategy::MinMax => min_max_strategy,
+    };
     input
         .iter()
-        .filter(|line| interpret_input_line(line))
+        .filter(|line| interpret_input_line(line, strategy))
         .count() as u32
 }
 
@@ -104,13 +111,13 @@ mod test {
     }
 
     #[test]
-    fn test_password_matches_policy() {
+    fn test_min_max_strategy() {
         let policy = Policy::new(1, 3, 'a');
         let password = "abcde";
-        assert_eq!(true, password_matches_policy(&policy, password));
+        assert_eq!(true, min_max_strategy(&policy, password));
         let policy = Policy::new(1, 3, 'b');
         let password = "cdefg";
-        assert_eq!(false, password_matches_policy(&policy, password))
+        assert_eq!(false, min_max_strategy(&policy, password))
     }
 
     #[test]
@@ -124,7 +131,10 @@ mod test {
     #[test]
     fn test_intepret_input_line() {
         let input = "1-3 a: abcde";
-        assert_eq!(true, interpret_input_line(input));
+        assert_eq!(
+            true,
+            interpret_input_line(input, |policy, password| min_max_strategy(policy, password))
+        );
     }
 
     #[test]
@@ -134,7 +144,7 @@ mod test {
             "1-3 b: cdefg".to_string(),
             "2-9 c: ccccccccc".to_string(),
         ]);
-        assert_eq!(2, number_of_valid_passwords(&input))
+        assert_eq!(2, number_of_valid_passwords(&input, PolicyStrategy::MinMax))
     }
 
     #[test]

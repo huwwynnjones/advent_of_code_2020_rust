@@ -1,8 +1,9 @@
 mod day_1;
 mod day_2;
+mod day_3;
 
 use day_1::{find_three_items_that_sum_2020, find_two_items_that_sum_2020};
-use day_2::number_of_valid_passwords;
+use day_2::{number_of_valid_passwords, PolicyStrategy};
 
 fn main() {
     println!("Day 1 part 1");
@@ -19,6 +20,6 @@ fn main() {
 
     println!("Day 2 part 1");
     let day_2_input = day_2::load_input_file("day_2.txt").expect("Missing input file");
-    let answer = number_of_valid_passwords(&day_2_input);
+    let answer = number_of_valid_passwords(&day_2_input, PolicyStrategy::MinMax);
     println!("Answer is {}", answer)
 }
