@@ -55,10 +55,28 @@ fn min_max_strategy(policy: &Policy, password: &str) -> bool {
 }
 
 fn position_strategy(policy: &Policy, password: &str) -> bool {
-    let first_idx = (policy.min - 1) as usize;
-    let second_idx = (policy.max - 1) as usize;
-    password.find(policy.target_char) == Some(first_idx)
-        || password.find(policy.target_char) == Some(second_idx)
+    let first_range = (policy.min - 1) as usize..policy.min as usize;
+    let second_range = (policy.max - 1) as usize..policy.max as usize;
+
+    let first_position = *password
+        .get(first_range)
+        .expect("No char input found")
+        .chars()
+        .collect::<Vec<char>>()
+        .first()
+        .expect("Empty vec");
+    let second_position = *password
+        .get(second_range)
+        .expect("No char input found")
+        .chars()
+        .collect::<Vec<char>>()
+        .first()
+        .expect("Empty vec");
+    if first_position == policy.target_char && second_position == policy.target_char {
+        false
+    } else {
+        first_position == policy.target_char || second_position == policy.target_char
+    }
 }
 
 fn split_input_string(input: &str) -> (Policy, String) {
@@ -139,7 +157,10 @@ mod test {
         assert_eq!(false, position_strategy(&policy, password));
         let policy = Policy::new(2, 9, 'c');
         let password = "ccccccccc";
-        assert_eq!(false, position_strategy(&policy, password))
+        assert_eq!(false, position_strategy(&policy, password));
+        let policy = Policy::new(2, 9, 'd');
+        let password = "cccdccccd";
+        assert_eq!(true, position_strategy(&policy, password))
     }
 
     #[test]

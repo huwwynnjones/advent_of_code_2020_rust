@@ -21,5 +21,8 @@ fn main() {
     println!("Day 2 part 1");
     let day_2_input = day_2::load_input_file("day_2.txt").expect("Missing input file");
     let answer = number_of_valid_passwords(&day_2_input, PolicyStrategy::MinMax);
+    println!("Answer is {}", answer);
+    println!("Day 2 part 2");
+    let answer = number_of_valid_passwords(&day_2_input, PolicyStrategy::Position);
     println!("Answer is {}", answer)
 }
