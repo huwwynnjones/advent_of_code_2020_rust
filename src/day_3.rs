@@ -5,19 +5,10 @@ enum Square {
 }
 
 fn create_grid_line(input: &str) -> Vec<Square> {
-    Vec::from([
-        Square::Open,
-        Square::Open,
-        Square::Tree,
-        Square::Tree,
-        Square::Open,
-        Square::Open,
-        Square::Open,
-        Square::Open,
-        Square::Open,
-        Square::Open,
-        Square::Open,
-    ])
+    input
+        .chars()
+        .map(|c| if c == '.' { Square::Open } else { Square::Tree })
+        .collect()
 }
 
 #[cfg(test)]
