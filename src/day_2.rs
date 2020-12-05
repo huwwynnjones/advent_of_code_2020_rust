@@ -24,14 +24,6 @@ impl Policy {
 fn parse_password_policy(input: &str) -> Policy {
     let split_input = input.split_whitespace().collect::<Vec<&str>>();
     let number_input = split_input.get(0).expect("No number input found");
-    let target_char = *split_input
-        .get(1)
-        .expect("No char input found")
-        .trim()
-        .chars()
-        .collect::<Vec<char>>()
-        .first()
-        .expect("Empty vec");
     let min_max_split = number_input.split_terminator('-').collect::<Vec<&str>>();
     let min = min_max_split
         .get(0)
@@ -43,6 +35,14 @@ fn parse_password_policy(input: &str) -> Policy {
         .expect("No max found")
         .parse::<u32>()
         .expect("Could not parse max");
+    let target_char = *split_input
+        .get(1)
+        .expect("Number range in input missing")
+        .trim()
+        .chars()
+        .collect::<Vec<char>>()
+        .first()
+        .expect("No characters in input");
     Policy::new(min, max, target_char)
 }
 
@@ -55,28 +55,24 @@ fn min_max_strategy(policy: &Policy, password: &str) -> bool {
 }
 
 fn position_strategy(policy: &Policy, password: &str) -> bool {
-    let first_range = (policy.min - 1) as usize..policy.min as usize;
-    let second_range = (policy.max - 1) as usize..policy.max as usize;
-
-    let first_position = *password
-        .get(first_range)
-        .expect("No char input found")
-        .chars()
-        .collect::<Vec<char>>()
-        .first()
-        .expect("Empty vec");
-    let second_position = *password
-        .get(second_range)
-        .expect("No char input found")
-        .chars()
-        .collect::<Vec<char>>()
-        .first()
-        .expect("Empty vec");
+    let first_position = extract_char_in_position(password, policy.min);
+    let second_position = extract_char_in_position(password, policy.max);
     if first_position == policy.target_char && second_position == policy.target_char {
         false
     } else {
         first_position == policy.target_char || second_position == policy.target_char
     }
+}
+
+fn extract_char_in_position(input: &str, position: u32) -> char {
+    let range = (position - 1) as usize..position as usize;
+    *input
+        .get(range)
+        .expect("No char input found")
+        .chars()
+        .collect::<Vec<char>>()
+        .first()
+        .expect("Empty vec")
 }
 
 fn split_input_string(input: &str) -> (Policy, String) {
