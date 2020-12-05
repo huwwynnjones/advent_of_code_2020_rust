@@ -25,25 +25,19 @@ fn parse_password_policy(input: &str) -> Policy {
     let split_input = input.split_whitespace().collect::<Vec<&str>>();
     let number_input = split_input.get(0).expect("No number input found");
     let min_max_split = number_input.split_terminator('-').collect::<Vec<&str>>();
-    let min = min_max_split
-        .get(0)
-        .expect("No min found")
-        .parse::<u32>()
-        .expect("Could not parse min");
-    let max = min_max_split
-        .get(1)
-        .expect("No max found")
-        .parse::<u32>()
-        .expect("Could not parse max");
-    let target_char = *split_input
-        .get(1)
-        .expect("Number range in input missing")
-        .trim()
-        .chars()
-        .collect::<Vec<char>>()
-        .first()
-        .expect("No characters in input");
+    let min = extract_number(&min_max_split, 0);
+    let max = extract_number(&min_max_split, 1);
+    let char_input = split_input.get(1).expect("No character input found");
+    let target_char = extract_char_in_position(char_input, 1);
     Policy::new(min, max, target_char)
+}
+
+fn extract_number(input: &[&str], position: u32) -> u32 {
+    input
+        .get(position as usize)
+        .expect("No number found")
+        .parse::<u32>()
+        .expect("Could not parse number")
 }
 
 fn min_max_strategy(policy: &Policy, password: &str) -> bool {
