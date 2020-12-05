@@ -57,10 +57,12 @@ fn min_max_strategy(policy: &Policy, password: &str) -> bool {
 fn position_strategy(policy: &Policy, password: &str) -> bool {
     let first_position = extract_char_in_position(password, policy.min);
     let second_position = extract_char_in_position(password, policy.max);
-    if first_position == policy.target_char && second_position == policy.target_char {
+    let first_match = first_position == policy.target_char;
+    let second_match = second_position == policy.target_char;
+    if first_match && second_match {
         false
     } else {
-        first_position == policy.target_char || second_position == policy.target_char
+        first_match || second_match
     }
 }
 
