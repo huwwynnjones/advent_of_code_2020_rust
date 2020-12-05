@@ -5,14 +5,14 @@ use std::{
 };
 
 #[derive(Eq, PartialEq, Debug)]
-pub struct Policy {
+struct Policy {
     min: u32,
     max: u32,
     target_char: char,
 }
 
 impl Policy {
-    pub fn new(min: u32, max: u32, target_char: char) -> Policy {
+    fn new(min: u32, max: u32, target_char: char) -> Policy {
         Policy {
             min,
             max,
