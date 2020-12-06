@@ -15,6 +15,10 @@ fn create_grid(input: &[String]) -> Vec<Vec<Square>> {
     input.iter().map(|line| create_grid_line(line)).collect()
 }
 
+fn move_tobogan(start_position: (usize, usize), slope: (usize, usize)) -> (usize, usize) {
+    (start_position.0 + slope.0, start_position.1 + slope.1)
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -70,5 +74,13 @@ mod test {
             ],
         ]);
         assert_eq!(create_grid(&input), correct_grid)
+    }
+
+    #[test]
+    fn test_move_tobogan() {
+        let start_position = (0, 0);
+        let slope = (3, 1);
+        let final_position = (3, 1);
+        assert_eq!(move_tobogan((0, 0), (3, 1)), (3, 1))
     }
 }
