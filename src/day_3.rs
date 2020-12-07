@@ -23,7 +23,19 @@ fn positions_used_to_reach_bottom(
     grid: &[Vec<Square>],
     slope: (usize, usize),
 ) -> Vec<(usize, usize)> {
-    Vec::from([(3, 1), (6, 2), (9, 4)])
+    let mut start_position = (0, 0);
+    let grid_depth = grid.len() - 1;
+    let mut positions = Vec::new();
+    loop {
+        let end_position = move_tobogan(start_position, slope);
+        if end_position.1 == grid_depth {
+            positions.push(end_position);
+            return positions;
+        } else {
+            positions.push(end_position);
+            start_position = end_position
+        }
+    }
 }
 
 #[cfg(test)]
@@ -102,7 +114,7 @@ mod test {
         let grid = create_grid(&input);
         let slope = (3, 1);
 
-        let correct_positions = Vec::from([(3, 1), (6, 2), (9, 4)]);
+        let correct_positions = Vec::from([(3, 1), (6, 2), (9, 3)]);
         assert_eq!(
             positions_used_to_reach_bottom(&grid, slope),
             correct_positions
