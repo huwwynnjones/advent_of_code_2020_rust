@@ -38,8 +38,13 @@ fn positions_used_to_reach_bottom(
     }
 }
 
-fn get_square(grid: &[Vec<Square>], slope: (usize, usize)) -> &Square {
-    &Square::Open
+fn get_square(grid: &[Vec<Square>], position: (usize, usize)) -> Option<&Square> {
+    let (x, y) = position;
+    let grid_line = match grid.get(y) {
+        Some(grid_line) => grid_line,
+        None => return None,
+    };
+    grid_line.get(x)
 }
 
 fn count_trees(grid: &[Vec<Square>], slope: (usize, usize)) -> u32 {
@@ -171,6 +176,20 @@ mod test {
             "..#.#...#.#".to_string(),
         ]);
         let grid = create_grid(&input);
-        assert_eq!(get_square(&grid, (3, 1)), &Square::Open)
+        assert_eq!(get_square(&grid, (3, 1)), Some(&Square::Open));
+        assert_eq!(get_square(&grid, (1, 2)), Some(&Square::Tree))
+    }
+
+    #[test]
+    fn test_get_square_with_wrapping() {
+        let input = Vec::from([
+            "..##.......".to_string(),
+            "#...#...#..".to_string(),
+            ".#....#..#.".to_string(),
+            "..#.#...#.#".to_string(),
+        ]);
+        let grid = create_grid(&input);
+        assert_eq!(get_square(&grid, (12, 4)), Some(&Square::Tree));
+        assert_eq!(get_square(&grid, (15, 5)), Some(&Square::Tree))
     }
 }
