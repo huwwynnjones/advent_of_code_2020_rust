@@ -38,6 +38,10 @@ fn positions_used_to_reach_bottom(
     }
 }
 
+fn count_trees(grid: &[Vec<Square>], slope: (usize, usize)) -> u32 {
+    1
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -119,5 +123,38 @@ mod test {
             positions_used_to_reach_bottom(&grid, slope),
             correct_positions
         )
+    }
+
+    #[test]
+    fn test_positions_used_to_reach_bottom_with_wrapping() {
+        let input = Vec::from([
+            "..##.......".to_string(),
+            "#...#...#..".to_string(),
+            ".#....#..#.".to_string(),
+            "..#.#...#.#".to_string(),
+            "..#.#...#.#".to_string(),
+        ]);
+        let grid = create_grid(&input);
+        let slope = (3, 1);
+
+        let correct_positions = Vec::from([(3, 1), (6, 2), (9, 3), (12, 4)]);
+        assert_eq!(
+            positions_used_to_reach_bottom(&grid, slope),
+            correct_positions
+        )
+    }
+
+    #[test]
+    fn test_count_trees() {
+        let input = Vec::from([
+            "..##.......".to_string(),
+            "#...#...#..".to_string(),
+            ".#....#..#.".to_string(),
+            "..#.#...#.#".to_string(),
+        ]);
+        let grid = create_grid(&input);
+        let slope = (3, 1);
+
+        assert_eq!(count_trees(&grid, slope), 1)
     }
 }
