@@ -73,6 +73,10 @@ pub fn load_input_file(file_name: &str) -> io::Result<Vec<String>> {
     Ok(lines)
 }
 
+pub fn tree_product(input: &[String], slopes: &[(usize, usize)]) -> u32 {
+    slopes.iter().map(|s| count_trees(input, *s)).product()
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -208,6 +212,28 @@ mod test {
     }
 
     #[test]
+    fn test_count_trees_with_different_slopes() {
+        let input = Vec::from([
+            "..##.......".to_string(),
+            "#...#...#..".to_string(),
+            ".#....#..#.".to_string(),
+            "..#.#...#.#".to_string(),
+            ".#...##..#.".to_string(),
+            "..#.##.....".to_string(),
+            ".#.#.#....#".to_string(),
+            ".#........#".to_string(),
+            "#.##...#...".to_string(),
+            "#...##....#".to_string(),
+            ".#..#...#.#".to_string(),
+        ]);
+
+        assert_eq!(count_trees(&input, (1, 1)), 2);
+        assert_eq!(count_trees(&input, (5, 1)), 3);
+        assert_eq!(count_trees(&input, (7, 1)), 4);
+        assert_eq!(count_trees(&input, (1, 2)), 2);
+    }
+
+    #[test]
     fn test_get_square() {
         let input = Vec::from([
             "..##.......".to_string(),
@@ -244,5 +270,24 @@ mod test {
             "...#..#.##..#.#......#.#.#.#..#".to_string(),
         ]);
         assert_eq!(correct_list, input)
+    }
+
+    #[test]
+    fn test_tree_product() {
+        let input = Vec::from([
+            "..##.......".to_string(),
+            "#...#...#..".to_string(),
+            ".#....#..#.".to_string(),
+            "..#.#...#.#".to_string(),
+            ".#...##..#.".to_string(),
+            "..#.##.....".to_string(),
+            ".#.#.#....#".to_string(),
+            ".#........#".to_string(),
+            "#.##...#...".to_string(),
+            "#...##....#".to_string(),
+            ".#..#...#.#".to_string(),
+        ]);
+        let slopes = Vec::from([(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]);
+        assert_eq!(tree_product(&input, &slopes), 336)
     }
 }

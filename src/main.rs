@@ -4,7 +4,7 @@ mod day_3;
 
 use day_1::{find_three_items_that_sum_2020, find_two_items_that_sum_2020};
 use day_2::{number_of_valid_passwords, PolicyStrategy};
-use day_3::count_trees;
+use day_3::{count_trees, tree_product};
 
 fn main() {
     println!("Day 1 part 1");
@@ -30,5 +30,9 @@ fn main() {
     println!("Day 3 part 1");
     let day_3_input = day_3::load_input_file("day_3.txt").expect("Missing input file");
     let answer = count_trees(&day_3_input, (3, 1));
+    println!("Answer is {}", answer);
+    println!("Day 3 part 2");
+    let slopes = Vec::from([(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]);
+    let answer = tree_product(&day_3_input, &slopes);
     println!("Answer is {}", answer);
 }
