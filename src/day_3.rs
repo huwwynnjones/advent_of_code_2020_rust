@@ -53,13 +53,13 @@ fn get_square(grid: &[Vec<Square>], position: (usize, usize)) -> Option<&Square>
     grid_line.get(x % grid_line.len())
 }
 
-pub fn count_trees(input: &[String], slope: (usize, usize)) -> u32 {
+pub fn count_trees(input: &[String], slope: (usize, usize)) -> u64 {
     let grid = create_grid(input);
     let positions = positions_used_to_reach_bottom(&grid, slope);
     positions
         .iter()
         .filter(|p| get_square(&grid, **p) == Some(&Square::Tree))
-        .count() as u32
+        .count() as u64
 }
 
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<String>> {
@@ -73,7 +73,7 @@ pub fn load_input_file(file_name: &str) -> io::Result<Vec<String>> {
     Ok(lines)
 }
 
-pub fn tree_product(input: &[String], slopes: &[(usize, usize)]) -> u32 {
+pub fn tree_product(input: &[String], slopes: &[(usize, usize)]) -> u64 {
     slopes.iter().map(|s| count_trees(input, *s)).product()
 }
 
