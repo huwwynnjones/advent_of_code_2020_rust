@@ -4,6 +4,7 @@ mod day_3;
 
 use day_1::{find_three_items_that_sum_2020, find_two_items_that_sum_2020};
 use day_2::{number_of_valid_passwords, PolicyStrategy};
+use day_3::count_trees;
 
 fn main() {
     println!("Day 1 part 1");
@@ -24,5 +25,10 @@ fn main() {
     println!("Answer is {}", answer);
     println!("Day 2 part 2");
     let answer = number_of_valid_passwords(&day_2_input, PolicyStrategy::Position);
-    println!("Answer is {}", answer)
+    println!("Answer is {}", answer);
+
+    println!("Day 3 part 1");
+    let day_3_input = day_3::load_input_file("day_3.txt").expect("Missing input file");
+    let answer = count_trees(&day_3_input, (3, 1));
+    println!("Answer is {}", answer);
 }

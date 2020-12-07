@@ -1,3 +1,9 @@
+use std::{
+    fs::File,
+    io,
+    io::{BufRead, BufReader},
+};
+
 #[derive(Debug, Eq, PartialEq)]
 enum Square {
     Open,
@@ -47,12 +53,24 @@ fn get_square(grid: &[Vec<Square>], position: (usize, usize)) -> Option<&Square>
     grid_line.get(x % grid_line.len())
 }
 
-fn count_trees(grid: &[Vec<Square>], slope: (usize, usize)) -> u32 {
-    let positions = positions_used_to_reach_bottom(grid, slope);
+pub fn count_trees(input: &[String], slope: (usize, usize)) -> u32 {
+    let grid = create_grid(input);
+    let positions = positions_used_to_reach_bottom(&grid, slope);
     positions
         .iter()
-        .filter(|p| get_square(grid, **p) == Some(&Square::Tree))
+        .filter(|p| get_square(&grid, **p) == Some(&Square::Tree))
         .count() as u32
+}
+
+pub fn load_input_file(file_name: &str) -> io::Result<Vec<String>> {
+    let input = File::open(file_name)?;
+    let reader = BufReader::new(input);
+    let mut lines = Vec::new();
+
+    for line in reader.lines() {
+        lines.push(line.expect("Should be a line to read"))
+    }
+    Ok(lines)
 }
 
 #[cfg(test)]
@@ -165,10 +183,9 @@ mod test {
             ".#....#..#.".to_string(),
             "..#.#...#.#".to_string(),
         ]);
-        let grid = create_grid(&input);
         let slope = (3, 1);
 
-        assert_eq!(count_trees(&grid, slope), 1)
+        assert_eq!(count_trees(&input, slope), 1)
     }
 
     fn test_count_trees_example() {
@@ -185,10 +202,9 @@ mod test {
             "#...##....#".to_string(),
             ".#..#...#.#".to_string(),
         ]);
-        let grid = create_grid(&input);
         let slope = (3, 1);
 
-        assert_eq!(count_trees(&grid, slope), 7)
+        assert_eq!(count_trees(&input, slope), 7)
     }
 
     #[test]
@@ -217,5 +233,16 @@ mod test {
         let grid = create_grid(&input);
         assert_eq!(get_square(&grid, (12, 4)), Some(&Square::Tree));
         assert_eq!(get_square(&grid, (15, 5)), Some(&Square::Tree))
+    }
+
+    #[test]
+    fn test_load_input_file() {
+        let input = load_input_file("day_3_test.txt").expect("Unable to load the file");
+        let correct_list = Vec::from([
+            ".##.............##......#.....#".to_string(),
+            ".#.#................#..........".to_string(),
+            "...#..#.##..#.#......#.#.#.#..#".to_string(),
+        ]);
+        assert_eq!(correct_list, input)
     }
 }
