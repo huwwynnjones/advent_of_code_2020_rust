@@ -1,6 +1,7 @@
 mod day_1;
 mod day_2;
 mod day_3;
+mod day_4;
 
 use day_1::{find_three_items_that_sum_2020, find_two_items_that_sum_2020};
 use day_2::{number_of_valid_passwords, PolicyStrategy};
