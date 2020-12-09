@@ -192,6 +192,7 @@ mod test {
         assert_eq!(count_trees(&input, slope), 1)
     }
 
+    #[test]
     fn test_count_trees_example() {
         let input = Vec::from([
             "..##.......".to_string(),
