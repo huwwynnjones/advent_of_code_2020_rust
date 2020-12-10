@@ -1,0 +1,7 @@
+hcl:#6b5442 ecl:brn iyr:2019
+pid:637485594 hgt:171cm
+eyr:2021 byr:1986
+
+eyr:2025 iyr:1938 byr:2014 hcl:#341e13
+hgt:66cm
+pid:70195175
