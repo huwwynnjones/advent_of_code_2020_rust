@@ -52,7 +52,7 @@ pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
     Ok(passports)
 }
 
-fn count_valid_passports(passport_data: &[Vec<String>]) -> u32 {
+pub fn count_valid_passports(passport_data: &[Vec<String>]) -> u32 {
     passport_data
         .iter()
         .filter(|p| valid_passport_data(&read_passport_data(&p)))
