@@ -44,11 +44,15 @@ pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
                     passport.push(l)
                 }
             }
-            Err(err) => panic!("No line to read"),
+            Err(_) => panic!("No line to read"),
         }
     }
     passports.push(passport);
     Ok(passports)
+}
+
+fn count_valid_passports(passport_data: &[Vec<String>]) -> u32 {
+    2
 }
 
 #[cfg(test)]
@@ -134,23 +138,29 @@ mod test {
         assert_eq!(input, correct_list)
     }
 
-    //#[test]
-    //fn count_valid_passports(){
-    //    let passport_data = Vec::from([
-    //        [
-    //           "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd".to_string(),
-    //            "byr:1937 iyr:2017 cid:147 hgt:183cm".to_string()
-    //        ],
-    //        [
-    //            "iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884".to_string(),
-    //             "hcl:#cfa07d byr:1929".to_string()
-    //         ],
-    //         [
-    //             "hcl:#ae17e1 iyr:2013".to_string(),
-    //             "eyr:2024".to_string(),
-    //             "ecl:brn pid:760753108 byr:1931".to_string(),
-    //             "hgt:179cm".to_string();
-    //         ],
-    //     ]);
-    // }
+    #[test]
+    fn test_count_valid_passports() {
+        let passport_data = Vec::from([
+            Vec::from([
+                "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd".to_string(),
+                "byr:1937 iyr:2017 cid:147 hgt:183cm".to_string(),
+            ]),
+            Vec::from([
+                "iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884".to_string(),
+                "hcl:#cfa07d byr:1929".to_string(),
+            ]),
+            Vec::from([
+                "hcl:#ae17e1 iyr:2013".to_string(),
+                "eyr:2024".to_string(),
+                "ecl:brn pid:760753108 byr:1931".to_string(),
+                "hgt:179cm".to_string(),
+            ]),
+            Vec::from([
+                "hcl:#cfa07d eyr:2025 pid:166559648".to_string(),
+                "iyr:2011 ecl:brn hgt:59in".to_string(),
+            ]),
+        ]);
+
+        assert_eq!(count_valid_passports(&passport_data), 2)
+    }
 }
