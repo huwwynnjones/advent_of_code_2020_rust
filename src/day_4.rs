@@ -175,4 +175,7 @@ mod test {
 
         assert_eq!(count_valid_passports(&passport_data), 2)
     }
+
+    #[test]
+    fn test_passport_values_are_valid() {}
 }
