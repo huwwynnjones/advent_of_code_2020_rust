@@ -1,17 +1,22 @@
 use std::{
-    collections::HashSet,
+    collections::{HashMap, HashSet},
     convert::TryInto,
     fs::File,
     io,
     io::{BufRead, BufReader},
 };
 
-fn read_passport_data(input: &[String]) -> Vec<String> {
+fn read_passport_data(input: &[String]) -> HashMap<String, String> {
     input
         .iter()
         .flat_map(|line| line.split_whitespace())
         .map(|i| i.split_terminator(':').collect::<Vec<&str>>())
-        .map(|kv| kv.first().expect("Missing key/value").to_string())
+        .map(|kv| {
+            (
+                kv.get(0).expect("Missing key/value").to_string(),
+                (kv.get(1).expect("Missing key/value").to_string()),
+            )
+        })
         .collect()
 }
 
@@ -55,7 +60,14 @@ pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
 pub fn count_valid_passports(passport_data: &[Vec<String>]) -> u32 {
     passport_data
         .iter()
-        .filter(|p| valid_passport_data(&read_passport_data(&p)))
+        .filter(|p| {
+            valid_passport_data(
+                &read_passport_data(&p)
+                    .keys()
+                    .map(|k| k.to_string())
+                    .collect::<Vec<String>>(),
+            )
+        })
         .count()
         .try_into()
         .expect("Can't convert usize to us32")
@@ -70,17 +82,18 @@ mod test {
             "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd".to_string(),
             "byr:1937 iyr:2017 cid:147 hgt:183cm".to_string(),
         ]);
-        let correct_output: Vec<String> = Vec::from([
-            "ecl".into(),
-            "pid".into(),
-            "eyr".into(),
-            "hcl".into(),
-            "byr".into(),
-            "iyr".into(),
-            "cid".into(),
-            "hgt".into(),
-        ]);
-        assert_eq!(read_passport_data(&passport_data), correct_output)
+
+        let mut correct_output: HashMap<String, String> = HashMap::new();
+        correct_output.insert("ecl".into(), "gry".into());
+        correct_output.insert("pid".into(), "860033327".into());
+        correct_output.insert("eyr".into(), "2020".into());
+        correct_output.insert("hcl".into(), "#fffffd".into());
+        correct_output.insert("byr".into(), "1937".into());
+        correct_output.insert("iyr".into(), "2017".into());
+        correct_output.insert("cid".into(), "147".into());
+        correct_output.insert("hgt".into(), "183cm".into());
+
+        assert_eq!(read_passport_data(&passport_data), correct_output);
     }
 
     #[test]
