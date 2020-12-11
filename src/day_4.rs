@@ -1,5 +1,6 @@
 use std::{
     collections::HashSet,
+    convert::TryInto,
     fs::File,
     io,
     io::{BufRead, BufReader},
@@ -52,7 +53,12 @@ pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
 }
 
 fn count_valid_passports(passport_data: &[Vec<String>]) -> u32 {
-    2
+    passport_data
+        .iter()
+        .filter(|p| valid_passport_data(&read_passport_data(&p)))
+        .count()
+        .try_into()
+        .expect("Can't convert usize to us32")
 }
 
 #[cfg(test)]
