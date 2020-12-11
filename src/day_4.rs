@@ -20,7 +20,7 @@ fn read_passport_data(input: &[String]) -> HashMap<String, String> {
         .collect()
 }
 
-fn valid_passport_data(input: &[String]) -> bool {
+fn valid_passport_data(input: &HashMap<String, String>) -> bool {
     let mut valid_keys = HashSet::new();
     valid_keys.insert("ecl");
     valid_keys.insert("pid");
@@ -30,7 +30,7 @@ fn valid_passport_data(input: &[String]) -> bool {
     valid_keys.insert("iyr");
     valid_keys.insert("hgt");
 
-    let passport_keys = input.iter().map(|s| s.as_ref()).collect::<HashSet<&str>>();
+    let passport_keys = input.keys().map(|s| s.as_ref()).collect::<HashSet<&str>>();
 
     passport_keys.is_superset(&valid_keys)
 }
@@ -60,14 +60,7 @@ pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
 pub fn count_valid_passports(passport_data: &[Vec<String>]) -> u32 {
     passport_data
         .iter()
-        .filter(|p| {
-            valid_passport_data(
-                &read_passport_data(&p)
-                    .keys()
-                    .map(|k| k.to_string())
-                    .collect::<Vec<String>>(),
-            )
-        })
+        .filter(|p| valid_passport_data(&read_passport_data(&p)))
         .count()
         .try_into()
         .expect("Can't convert usize to us32")
@@ -98,44 +91,41 @@ mod test {
 
     #[test]
     fn test_valid_passport_data() {
-        let passport_data: Vec<String> = Vec::from([
-            "ecl".into(),
-            "pid".into(),
-            "eyr".into(),
-            "hcl".into(),
-            "byr".into(),
-            "iyr".into(),
-            "cid".into(),
-            "hgt".into(),
-        ]);
+        let mut passport_data: HashMap<String, String> = HashMap::new();
+        passport_data.insert("ecl".into(), "gry".into());
+        passport_data.insert("pid".into(), "860033327".into());
+        passport_data.insert("eyr".into(), "2020".into());
+        passport_data.insert("hcl".into(), "#fffffd".into());
+        passport_data.insert("byr".into(), "1937".into());
+        passport_data.insert("iyr".into(), "2017".into());
+        passport_data.insert("cid".into(), "147".into());
+        passport_data.insert("hgt".into(), "183cm".into());
         assert_eq!(valid_passport_data(&passport_data), true)
     }
 
     #[test]
     fn test_valid_passport_data_invalid_keys() {
-        let passport_data: Vec<String> = Vec::from([
-            "ecl".into(),
-            "pid".into(),
-            "eyr".into(),
-            "hcl".into(),
-            "byr".into(),
-            "iyr".into(),
-            "cid".into(),
-        ]);
+        let mut passport_data: HashMap<String, String> = HashMap::new();
+        passport_data.insert("ecl".into(), "gry".into());
+        passport_data.insert("pid".into(), "860033327".into());
+        passport_data.insert("eyr".into(), "2020".into());
+        passport_data.insert("hcl".into(), "#fffffd".into());
+        passport_data.insert("byr".into(), "1937".into());
+        passport_data.insert("iyr".into(), "2017".into());
+        passport_data.insert("cid".into(), "147".into());
         assert_eq!(valid_passport_data(&passport_data), false)
     }
 
     #[test]
     fn test_valid_passport_data_missing_optional_keys() {
-        let passport_data: Vec<String> = Vec::from([
-            "ecl".into(),
-            "pid".into(),
-            "eyr".into(),
-            "hcl".into(),
-            "byr".into(),
-            "iyr".into(),
-            "hgt".into(),
-        ]);
+        let mut passport_data: HashMap<String, String> = HashMap::new();
+        passport_data.insert("ecl".into(), "gry".into());
+        passport_data.insert("pid".into(), "860033327".into());
+        passport_data.insert("eyr".into(), "2020".into());
+        passport_data.insert("hcl".into(), "#fffffd".into());
+        passport_data.insert("byr".into(), "1937".into());
+        passport_data.insert("iyr".into(), "2017".into());
+        passport_data.insert("hgt".into(), "183cm".into());
         assert_eq!(valid_passport_data(&passport_data), true)
     }
 
