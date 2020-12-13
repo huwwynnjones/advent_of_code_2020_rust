@@ -43,19 +43,19 @@ fn passport_values_are_valid(passport_data: &HashMap<String, String>) -> bool {
 }
 
 fn valid_birth_year(birth_year: &str) -> bool {
-    valid_year(birth_year, 1920, 2002)
+    valid_number(birth_year, 1920, 2002)
 }
 
 fn valid_issue_year(issue_year: &str) -> bool {
-    valid_year(issue_year, 2010, 2020)
+    valid_number(issue_year, 2010, 2020)
 }
 
 fn valid_expiration_year(expiration_year: &str) -> bool {
-    valid_year(expiration_year, 2020, 2030)
+    valid_number(expiration_year, 2020, 2030)
 }
 
-fn valid_year(year: &str, min: u32, max: u32) -> bool {
-    let number = match year.parse::<u32>() {
+fn valid_number(number: &str, min: u32, max: u32) -> bool {
+    let number = match number.parse::<u32>() {
         Ok(nmb) => nmb,
         Err(_) => return false,
     };
@@ -66,11 +66,11 @@ fn valid_height(height: &str) -> bool {
     match height.get(height.len() - 2..height.len()) {
         Some(dimension) => match dimension {
             "cm" => match height.get(0..3) {
-                Some(number) => valid_year(number, 150, 193),
+                Some(number) => valid_number(number, 150, 193),
                 None => false,
             },
             "in" => match height.get(0..2) {
-                Some(number) => valid_year(number, 59, 76),
+                Some(number) => valid_number(number, 59, 76),
                 None => false,
             },
             _ => false,
