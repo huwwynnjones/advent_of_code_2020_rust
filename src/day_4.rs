@@ -63,7 +63,20 @@ fn valid_year(year: &str, min: u32, max: u32) -> bool {
 }
 
 fn valid_height(height: &str) -> bool {
-    true
+    match height.get(height.len() - 2..height.len()) {
+        Some(dimension) => match dimension {
+            "cm" => match height.get(0..3) {
+                Some(number) => valid_year(number, 150, 193),
+                None => false,
+            },
+            "in" => match height.get(0..2) {
+                Some(number) => valid_year(number, 59, 76),
+                None => false,
+            },
+            _ => false,
+        },
+        None => false,
+    }
 }
 
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
@@ -256,6 +269,10 @@ mod test {
 
     #[test]
     fn test_valid_height() {
-        assert_eq!(valid_height("60in"), true)
+        assert_eq!(valid_height("60in"), true);
+        assert_eq!(valid_height("60"), false);
+        assert_eq!(valid_height("190cm"), true);
+        assert_eq!(valid_height("190in"), false);
+        assert_eq!(valid_height("77in"), false);
     }
 }
