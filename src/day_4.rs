@@ -38,6 +38,10 @@ fn passport_keys_are_valid(passport_keys: HashSet<&str>) -> bool {
     passport_keys.is_superset(&valid_keys)
 }
 
+fn passport_values_are_valid(passport_data: &HashMap<String, String>) -> bool {
+    true
+}
+
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
     let input = File::open(file_name)?;
     let reader = BufReader::new(input);
@@ -177,5 +181,16 @@ mod test {
     }
 
     #[test]
-    fn test_passport_values_are_valid() {}
+    fn test_passport_values_are_valid() {
+        let mut passport_data: HashMap<String, String> = HashMap::new();
+        passport_data.insert("ecl".into(), "grn".into());
+        passport_data.insert("pid".into(), "087499704".into());
+        passport_data.insert("eyr".into(), "2030".into());
+        passport_data.insert("hcl".into(), "#623a2f".into());
+        passport_data.insert("byr".into(), "1980".into());
+        passport_data.insert("iyr".into(), "2012".into());
+        passport_data.insert("hgt".into(), "74in".into());
+
+        assert_eq!(passport_values_are_valid(&passport_data), true)
+    }
 }
