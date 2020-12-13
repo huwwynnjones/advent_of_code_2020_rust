@@ -42,6 +42,10 @@ fn passport_values_are_valid(passport_data: &HashMap<String, String>) -> bool {
     true
 }
 
+fn valid_birth_year(birth_year: &str) -> bool {
+    true
+}
+
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
     let input = File::open(file_name)?;
     let reader = BufReader::new(input);
@@ -192,5 +196,10 @@ mod test {
         passport_data.insert("hgt".into(), "74in".into());
 
         assert_eq!(passport_values_are_valid(&passport_data), true)
+    }
+
+    #[test]
+    fn test_valid_birth_year() {
+        assert_eq!(valid_birth_year("2000"), true)
     }
 }
