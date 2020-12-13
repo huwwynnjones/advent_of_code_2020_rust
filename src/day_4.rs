@@ -62,6 +62,10 @@ fn valid_year(year: &str, min: u32, max: u32) -> bool {
     number >= min && number <= max
 }
 
+fn valid_height(height: &str) -> bool {
+    true
+}
+
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
     let input = File::open(file_name)?;
     let reader = BufReader::new(input);
@@ -248,5 +252,10 @@ mod test {
         assert_eq!(valid_expiration_year("2030"), true);
         assert_eq!(valid_expiration_year("20025"), false);
         assert_eq!(valid_expiration_year("200"), false);
+    }
+
+    #[test]
+    fn test_valid_height() {
+        assert_eq!(valid_height("60in"), true)
     }
 }
