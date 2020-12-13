@@ -43,7 +43,11 @@ fn passport_values_are_valid(passport_data: &HashMap<String, String>) -> bool {
 }
 
 fn valid_birth_year(birth_year: &str) -> bool {
-    true
+    let number = match birth_year.parse::<u32>() {
+        Ok(nmb) => nmb,
+        Err(err) => return false,
+    };
+    number > 1919 && number < 2003
 }
 
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
@@ -200,6 +204,13 @@ mod test {
 
     #[test]
     fn test_valid_birth_year() {
-        assert_eq!(valid_birth_year("2000"), true)
+        assert_eq!(valid_birth_year("2000"), true);
+        assert_eq!(valid_birth_year("number"), false);
+        assert_eq!(valid_birth_year("1919"), false);
+        assert_eq!(valid_birth_year("2003"), false);
+        assert_eq!(valid_birth_year("1920"), true);
+        assert_eq!(valid_birth_year("2002"), true);
+        assert_eq!(valid_birth_year("20025"), false);
+        assert_eq!(valid_birth_year("200"), false);
     }
 }
