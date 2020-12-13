@@ -43,11 +43,23 @@ fn passport_values_are_valid(passport_data: &HashMap<String, String>) -> bool {
 }
 
 fn valid_birth_year(birth_year: &str) -> bool {
-    let number = match birth_year.parse::<u32>() {
+    valid_year(birth_year, 1920, 2002)
+}
+
+fn valid_issue_year(issue_year: &str) -> bool {
+    valid_year(issue_year, 2010, 2020)
+}
+
+fn valid_expiration_year(expiration_year: &str) -> bool {
+    valid_year(expiration_year, 2020, 2030)
+}
+
+fn valid_year(year: &str, min: u32, max: u32) -> bool {
+    let number = match year.parse::<u32>() {
         Ok(nmb) => nmb,
-        Err(err) => return false,
+        Err(_) => return false,
     };
-    number > 1919 && number < 2003
+    number >= min && number <= max
 }
 
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
@@ -212,5 +224,29 @@ mod test {
         assert_eq!(valid_birth_year("2002"), true);
         assert_eq!(valid_birth_year("20025"), false);
         assert_eq!(valid_birth_year("200"), false);
+    }
+
+    #[test]
+    fn test_valid_issue_year() {
+        assert_eq!(valid_issue_year("2015"), true);
+        assert_eq!(valid_issue_year("number"), false);
+        assert_eq!(valid_issue_year("2009"), false);
+        assert_eq!(valid_issue_year("2021"), false);
+        assert_eq!(valid_issue_year("2010"), true);
+        assert_eq!(valid_issue_year("2020"), true);
+        assert_eq!(valid_issue_year("20025"), false);
+        assert_eq!(valid_issue_year("200"), false);
+    }
+
+    #[test]
+    fn test_valid_expiration_year() {
+        assert_eq!(valid_expiration_year("2025"), true);
+        assert_eq!(valid_expiration_year("number"), false);
+        assert_eq!(valid_expiration_year("2019"), false);
+        assert_eq!(valid_expiration_year("2031"), false);
+        assert_eq!(valid_expiration_year("2020"), true);
+        assert_eq!(valid_expiration_year("2030"), true);
+        assert_eq!(valid_expiration_year("20025"), false);
+        assert_eq!(valid_expiration_year("200"), false);
     }
 }
