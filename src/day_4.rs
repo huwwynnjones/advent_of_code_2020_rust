@@ -63,6 +63,9 @@ fn valid_number(number: &str, min: u32, max: u32) -> bool {
 }
 
 fn valid_height(height: &str) -> bool {
+    if height.is_empty() {
+        return false;
+    }
     match height.get(height.len() - 2..height.len()) {
         Some(dimension) => match dimension {
             "cm" => match height.get(0..3) {
@@ -274,5 +277,7 @@ mod test {
         assert_eq!(valid_height("190cm"), true);
         assert_eq!(valid_height("190in"), false);
         assert_eq!(valid_height("77in"), false);
+        assert_eq!(valid_height("77km"), false);
+        assert_eq!(valid_height(""), false);
     }
 }
