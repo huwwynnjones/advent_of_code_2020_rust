@@ -6,7 +6,7 @@ mod day_4;
 use day_1::{find_three_items_that_sum_2020, find_two_items_that_sum_2020};
 use day_2::{number_of_valid_passwords, PolicyStrategy};
 use day_3::{count_trees, tree_product};
-use day_4::count_valid_passports;
+use day_4::{count_valid_passports, CountType};
 
 fn main() {
     println!("Day 1 part 1");
@@ -40,6 +40,9 @@ fn main() {
 
     println!("Day 4 part 1");
     let day_4_input = day_4::load_input_file("day_4.txt").expect("Missing input file");
-    let answer = count_valid_passports(&day_4_input);
+    let answer = count_valid_passports(&day_4_input, CountType::KeysOnly);
+    println!("Answer is {}", answer);
+    println!("Day 4 part 2");
+    let answer = count_valid_passports(&day_4_input, CountType::KeysAndValues);
     println!("Answer is {}", answer);
 }

@@ -21,9 +21,20 @@ fn read_passport_data(input: &[String]) -> HashMap<String, String> {
         .collect()
 }
 
-fn valid_passport_data(input: &HashMap<String, String>) -> bool {
+#[derive(Copy, Clone)]
+pub enum CountType {
+    KeysOnly,
+    KeysAndValues,
+}
+
+fn valid_passport_data(input: &HashMap<String, String>, count_type: CountType) -> bool {
     let keys = input.keys().map(|s| s.as_ref()).collect::<HashSet<&str>>();
-    passport_keys_are_valid(keys) && passport_values_are_valid(input)
+    match count_type {
+        CountType::KeysOnly => passport_keys_are_valid(keys),
+        CountType::KeysAndValues => {
+            passport_keys_are_valid(keys) && passport_values_are_valid(input)
+        }
+    }
 }
 
 fn passport_keys_are_valid(passport_keys: HashSet<&str>) -> bool {
@@ -164,10 +175,10 @@ pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
     Ok(passports)
 }
 
-pub fn count_valid_passports(passport_data: &[Vec<String>]) -> u32 {
+pub fn count_valid_passports(passport_data: &[Vec<String>], count_type: CountType) -> u32 {
     passport_data
         .iter()
-        .filter(|p| valid_passport_data(&read_passport_data(&p)))
+        .filter(|p| valid_passport_data(&read_passport_data(&p), count_type))
         .count()
         .try_into()
         .expect("Can't convert usize to us32")
@@ -207,7 +218,10 @@ mod test {
         passport_data.insert("iyr".into(), "2017".into());
         passport_data.insert("cid".into(), "147".into());
         passport_data.insert("hgt".into(), "183cm".into());
-        assert_eq!(valid_passport_data(&passport_data), true)
+        assert_eq!(
+            valid_passport_data(&passport_data, CountType::KeysAndValues),
+            true
+        )
     }
 
     #[test]
@@ -220,7 +234,10 @@ mod test {
         passport_data.insert("byr".into(), "1937".into());
         passport_data.insert("iyr".into(), "2017".into());
         passport_data.insert("cid".into(), "147".into());
-        assert_eq!(valid_passport_data(&passport_data), false)
+        assert_eq!(
+            valid_passport_data(&passport_data, CountType::KeysOnly),
+            false
+        )
     }
 
     #[test]
@@ -233,7 +250,10 @@ mod test {
         passport_data.insert("byr".into(), "1937".into());
         passport_data.insert("iyr".into(), "2017".into());
         passport_data.insert("hgt".into(), "183cm".into());
-        assert_eq!(valid_passport_data(&passport_data), true)
+        assert_eq!(
+            valid_passport_data(&passport_data, CountType::KeysOnly),
+            true
+        )
     }
 
     #[test]
@@ -277,7 +297,10 @@ mod test {
             ]),
         ]);
 
-        assert_eq!(count_valid_passports(&passport_data), 2)
+        assert_eq!(
+            count_valid_passports(&passport_data, CountType::KeysOnly),
+            2
+        )
     }
 
     #[test]
