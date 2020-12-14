@@ -88,6 +88,10 @@ fn valid_hair_colour(colour: &str) -> bool {
     reg.is_match(colour)
 }
 
+fn valid_eye_colour(colour: &str) -> bool {
+    true
+}
+
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
     let input = File::open(file_name)?;
     let reader = BufReader::new(input);
@@ -294,5 +298,10 @@ mod test {
         assert_eq!(valid_hair_colour("123abc"), false);
         assert_eq!(valid_hair_colour("#123456"), true);
         assert_eq!(valid_hair_colour("#abcdef"), true);
+    }
+
+    #[test]
+    fn test_eye_colour() {
+        assert_eq!(valid_eye_colour("amb"), true);
     }
 }
