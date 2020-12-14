@@ -89,7 +89,8 @@ fn valid_hair_colour(colour: &str) -> bool {
 }
 
 fn valid_eye_colour(colour: &str) -> bool {
-    true
+    let valid_colours = Vec::from(["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]);
+    valid_colours.contains(&colour)
 }
 
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
@@ -303,5 +304,12 @@ mod test {
     #[test]
     fn test_eye_colour() {
         assert_eq!(valid_eye_colour("amb"), true);
+        assert_eq!(valid_eye_colour("blu"), true);
+        assert_eq!(valid_eye_colour("brn"), true);
+        assert_eq!(valid_eye_colour("gry"), true);
+        assert_eq!(valid_eye_colour("grn"), true);
+        assert_eq!(valid_eye_colour("hzl"), true);
+        assert_eq!(valid_eye_colour("oth"), true);
+        assert_eq!(valid_eye_colour("zod"), false);
     }
 }
