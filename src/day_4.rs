@@ -40,6 +40,47 @@ fn passport_keys_are_valid(passport_keys: HashSet<&str>) -> bool {
 }
 
 fn passport_values_are_valid(passport_data: &HashMap<String, String>) -> bool {
+    for key in passport_data.keys() {
+        let value = passport_data.get(key).expect("No value");
+        match key.as_ref() {
+            "ecl" => {
+                if !valid_eye_colour(value) {
+                    return false;
+                }
+            }
+            "pid" => {
+                if !valid_passport_number(value) {
+                    return false;
+                }
+            }
+            "eyr" => {
+                if !valid_expiration_year(value) {
+                    return false;
+                }
+            }
+            "hcl" => {
+                if !valid_hair_colour(value) {
+                    return false;
+                }
+            }
+            "byr" => {
+                if !valid_birth_year(value) {
+                    return false;
+                }
+            }
+            "iyr" => {
+                if !valid_issue_year(value) {
+                    return false;
+                }
+            }
+            "hgt" => {
+                if !valid_height(value) {
+                    return false;
+                }
+            }
+            _ => return false,
+        }
+    }
     true
 }
 
@@ -251,6 +292,21 @@ mod test {
         passport_data.insert("hgt".into(), "74in".into());
 
         assert_eq!(passport_values_are_valid(&passport_data), true)
+    }
+
+    #[test]
+    fn test_passport_values_are_invalid() {
+        let mut passport_data: HashMap<String, String> = HashMap::new();
+        passport_data.insert("ecl".into(), "amb".into());
+        passport_data.insert("pid".into(), "186cm".into());
+        passport_data.insert("eyr".into(), "1972".into());
+        passport_data.insert("hcl".into(), "#18171d".into());
+        passport_data.insert("byr".into(), "1926".into());
+        passport_data.insert("iyr".into(), "2018".into());
+        passport_data.insert("hgt".into(), "170".into());
+        passport_data.insert("cid".into(), "100".into());
+
+        assert_eq!(passport_values_are_valid(&passport_data), false)
     }
 
     #[test]
