@@ -84,7 +84,8 @@ fn valid_height(height: &str) -> bool {
 }
 
 fn valid_hair_colour(colour: &str) -> bool {
-    true
+    let reg = Regex::new(r"^#([0-9]|[a-f]){6}").expect("Unable to create Regex");
+    reg.is_match(colour)
 }
 
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
@@ -288,6 +289,8 @@ mod test {
 
     #[test]
     fn test_valid_hair_colour() {
-        assert_eq!(valid_hair_colour("#123abc"), true)
+        assert_eq!(valid_hair_colour("#123abc"), true);
+        assert_eq!(valid_hair_colour("#123abz"), false);
+        assert_eq!(valid_hair_colour("123abc"), false);
     }
 }
