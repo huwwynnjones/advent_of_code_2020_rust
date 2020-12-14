@@ -1,3 +1,4 @@
+use regex::Regex;
 use std::{
     collections::{HashMap, HashSet},
     convert::TryInto,
@@ -80,6 +81,10 @@ fn valid_height(height: &str) -> bool {
         },
         None => false,
     }
+}
+
+fn valid_hair_colour(colour: &str) -> bool {
+    true
 }
 
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
@@ -279,5 +284,10 @@ mod test {
         assert_eq!(valid_height("77in"), false);
         assert_eq!(valid_height("77km"), false);
         assert_eq!(valid_height(""), false);
+    }
+
+    #[test]
+    fn test_valid_hair_colour() {
+        assert_eq!(valid_hair_colour("#123abc"), true)
     }
 }
