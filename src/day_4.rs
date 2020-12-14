@@ -292,5 +292,7 @@ mod test {
         assert_eq!(valid_hair_colour("#123abc"), true);
         assert_eq!(valid_hair_colour("#123abz"), false);
         assert_eq!(valid_hair_colour("123abc"), false);
+        assert_eq!(valid_hair_colour("#123456"), true);
+        assert_eq!(valid_hair_colour("#abcdef"), true);
     }
 }
