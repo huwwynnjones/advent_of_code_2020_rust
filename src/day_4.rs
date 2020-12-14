@@ -94,7 +94,11 @@ fn valid_eye_colour(colour: &str) -> bool {
 }
 
 fn valid_passport_number(number: &str) -> bool {
-    true
+    if number.len() == 9 {
+        number.parse::<u32>().is_ok()
+    } else {
+        false
+    }
 }
 
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
@@ -319,6 +323,8 @@ mod test {
 
     #[test]
     fn test_valid_passport_number() {
-        assert_eq!(valid_passport_number("000000001"), true)
+        assert_eq!(valid_passport_number("000000001"), true);
+        assert_eq!(valid_passport_number("0123456789"), false);
+        assert_eq!(valid_passport_number("abcdefghij"), false)
     }
 }
