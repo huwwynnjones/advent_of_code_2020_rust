@@ -23,7 +23,7 @@ fn read_passport_data(input: &[String]) -> HashMap<String, String> {
 
 fn valid_passport_data(input: &HashMap<String, String>) -> bool {
     let keys = input.keys().map(|s| s.as_ref()).collect::<HashSet<&str>>();
-    passport_keys_are_valid(keys)
+    passport_keys_are_valid(keys) && passport_values_are_valid(input)
 }
 
 fn passport_keys_are_valid(passport_keys: HashSet<&str>) -> bool {
@@ -78,7 +78,7 @@ fn passport_values_are_valid(passport_data: &HashMap<String, String>) -> bool {
                     return false;
                 }
             }
-            _ => return false,
+            _ => (),
         }
     }
     true
