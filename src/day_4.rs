@@ -93,6 +93,10 @@ fn valid_eye_colour(colour: &str) -> bool {
     valid_colours.contains(&colour)
 }
 
+fn valid_passport_number(number: &str) -> bool {
+    true
+}
+
 pub fn load_input_file(file_name: &str) -> io::Result<Vec<Vec<String>>> {
     let input = File::open(file_name)?;
     let reader = BufReader::new(input);
@@ -311,5 +315,10 @@ mod test {
         assert_eq!(valid_eye_colour("hzl"), true);
         assert_eq!(valid_eye_colour("oth"), true);
         assert_eq!(valid_eye_colour("zod"), false);
+    }
+
+    #[test]
+    fn test_valid_passport_number() {
+        assert_eq!(valid_passport_number("000000001"), true)
     }
 }
