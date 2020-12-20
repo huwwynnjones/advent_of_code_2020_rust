@@ -3,15 +3,16 @@ fn seat_rows() -> Vec<u32> {
 }
 
 fn lower_half(seats: &[u32]) -> Vec<u32> {
-    assert!(seats.len() % 2 == 0);
-    let mid_point = seats.len() / 2;
-    seats[0..mid_point].to_vec()
+    seats[0..mid_point(&seats)].to_vec()
 }
 
 fn upper_half(seats: &[u32]) -> Vec<u32> {
+    seats[mid_point(&seats)..seats.len()].to_vec()
+}
+
+fn mid_point(seats: &[u32]) -> usize {
     assert!(seats.len() % 2 == 0);
-    let mid_point = seats.len() / 2;
-    seats[mid_point..seats.len()].to_vec()
+    seats.len() / 2
 }
 
 #[cfg(test)]
