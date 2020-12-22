@@ -16,7 +16,17 @@ fn mid_point(seats: &[u32]) -> usize {
 }
 
 fn split_rows(seats: &[u32], indicator: char) -> Vec<u32> {
-    (0..64).collect()
+    split(seats, indicator, 'F', 'B')
+}
+
+fn split(seats: &[u32], indicator: char, lower_indicator: char, upper_indicator: char) -> Vec<u32> {
+    if indicator == lower_indicator {
+        lower_half(seats)
+    } else if indicator == upper_indicator {
+        upper_half(seats)
+    } else {
+        panic!("Indicator should match")
+    }
 }
 
 #[cfg(test)]
