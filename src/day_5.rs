@@ -15,6 +15,10 @@ fn mid_point(seats: &[u32]) -> usize {
     seats.len() / 2
 }
 
+fn split_rows(seats: &[u32], indicator: char) -> Vec<u32> {
+    (0..64).collect()
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -29,5 +33,11 @@ mod test {
     fn test_upper_half() {
         let correct_list: Vec<u32> = (64..128).collect();
         assert_eq!(upper_half(&seat_rows()), correct_list)
+    }
+
+    #[test]
+    fn test_split_rows() {
+        let correct_list: Vec<u32> = (0..64).collect();
+        assert_eq!(split_rows(&seat_rows(), 'F'), correct_list)
     }
 }
