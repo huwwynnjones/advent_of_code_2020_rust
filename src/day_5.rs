@@ -23,8 +23,15 @@ fn split_seats(seats: &[u32], indicator: char) -> Vec<u32> {
     }
 }
 
-fn find_row(seats: &[u32], input: &str) -> u32 {
-    44
+fn find_row(seats: &[u32], input: &[char]) -> Vec<u32> {
+    if input.is_empty() {
+        seats.to_vec()
+    } else {
+        find_row(
+            &split_seats(&seats, *input.first().expect("No character")),
+            &input[1..input.len()],
+        )
+    }
 }
 
 #[cfg(test)]
@@ -57,6 +64,7 @@ mod test {
 
     #[test]
     fn test_find_row() {
-        assert_eq!(find_row(&seat_rows(), "FBFBBFF"), 44)
+        let indicators: Vec<char> = "FBFBBFF".chars().collect();
+        assert_eq!(find_row(&seat_rows(), &indicators), Vec::from([44]))
     }
 }
