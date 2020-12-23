@@ -40,8 +40,14 @@ mod test {
     }
 
     #[test]
-    fn test_split_seats() {
+    fn test_split_seats_front() {
         let correct_list: Vec<u32> = (0..64).collect();
         assert_eq!(split_seats(&seat_rows(), 'F'), correct_list)
+    }
+
+    #[test]
+    fn test_split_seats_back() {
+        let correct_list: Vec<u32> = (64..128).collect();
+        assert_eq!(split_seats(&seat_rows(), 'B'), correct_list)
     }
 }
