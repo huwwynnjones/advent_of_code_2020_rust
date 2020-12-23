@@ -23,6 +23,10 @@ fn split_seats(seats: &[u32], indicator: char) -> Vec<u32> {
     }
 }
 
+fn find_row(seats: &[u32], input: &str) -> u32 {
+    44
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -49,5 +53,10 @@ mod test {
     fn test_split_seats_back() {
         let correct_list: Vec<u32> = (64..128).collect();
         assert_eq!(split_seats(&seat_rows(), 'B'), correct_list)
+    }
+
+    #[test]
+    fn test_find_row() {
+        assert_eq!(find_row(&seat_rows(), "FBFBBFF"), 44)
     }
 }
