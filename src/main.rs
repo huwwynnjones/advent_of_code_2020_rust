@@ -10,6 +10,7 @@ use day_1::{find_three_items_that_sum_2020, find_two_items_that_sum_2020};
 use day_2::{number_of_valid_passwords, PolicyStrategy};
 use day_3::{count_trees, tree_product};
 use day_4::{count_valid_passports, CountType};
+use day_9::{all_numbers_valid, encryption_weakness};
 
 fn main() {
     println!("Day 1 part 1");
@@ -48,4 +49,12 @@ fn main() {
     println!("Day 4 part 2");
     let answer = count_valid_passports(&day_4_input, CountType::KeysAndValues);
     println!("Answer is {}", answer);
+
+    println!("Day 9 part 1");
+    let day_9_input = day_9::load_input_file("day_9.txt").expect("Missing input file");
+    let answer_1 = all_numbers_valid(&day_9_input, 25);
+    println!("Answer is {}", answer_1.1.unwrap());
+    println!("Day 9 part 2");
+    let answer_2 = encryption_weakness(&day_9_input, answer_1.1.unwrap());
+    println!("Answer is {}", answer_2.unwrap());
 }
